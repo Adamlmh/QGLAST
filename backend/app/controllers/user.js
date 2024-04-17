@@ -1,7 +1,8 @@
 const db = require("../models");
 const User = db.user;
 const Op = db.Sequelize.Op;
-
+const {generateToken,verifyToken} = require('../utils/users');
+const secretKey = 'm8F2Gf7$0lK3@uP1jR6^aS5#dH9&yT4'; // 一个长度为 32 字符的随机生成的密钥
 // 注册模块
 exports.create = (req, res) => {
   let status;
@@ -28,10 +29,14 @@ exports.create = (req, res) => {
       }
     })
     .then(newUser => {
-      console.log(newUser.dataValues);
-      const data = newUser.dataValues;
+      const username = req.body.username;
+      const password =req.body.password;
+      const usertype =req.body.usertype;
+        //生成token
+        const token = generateToken({ username, password,usertype },secretKey);
+        console.log(token);      
 //send里面要传入一个对象 否则无法被解析
-      res.status(200).send(data);
+      res.status(200).send({token:token,message:`注册成功，欢迎您${status}：${username}`});
     })
     .catch(err => {
       res.status(500).send({message:`${err}`});
@@ -52,7 +57,12 @@ status='用户'
 
       if (data) {
         if(data.password===req.body.password){
-        res.send(data);
+      const username = req.body.username;
+      const password =req.body.password;
+      const usertype =req.body.usertype;
+        //生成token
+        const token = generateToken({ username, password,usertype },secretKey);       
+        res.send({token:token,message:`登录成功，欢迎您${status}：${username}`});
         }
 else{
          res.status(403).send({

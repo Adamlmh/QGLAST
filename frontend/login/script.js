@@ -17,8 +17,6 @@ status='用户'
 }else{
   status='管理员'
 }
-//判断状态码
-let codeStatus;
   //调用接口
   let fetchUrl;
   if(sign){
@@ -43,23 +41,16 @@ let codeStatus;
 root.style.setProperty('--alert-color', '#00a76f'); // 修改为绿色
     if(response.status >= 400 ){
 root.style.setProperty('--alert-color', '#FADAD8'); // 修改为红色
-codeStatus = 1;
     }
       return response.json();
   })
   .then(data =>{
       //登录成功
-    if(codeStatus){
       alert(`${data.message}`)
-    }else{
-      alert(`欢迎您${status}：${data.username}`);
-    }
-
-          // localStorage.setItem('token',data.token);
-  // setTimeout(() => {
-  //       location.href = '../home/index.html'
-  // }, 2000);    
-  // })      
+          localStorage.setItem('token',data.token);
+  setTimeout(() => {
+        location.href = '../home/index.html'
+  }, 2000);         
   })
   .catch((error)=>{
       //网络故障
