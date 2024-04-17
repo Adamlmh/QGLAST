@@ -18,7 +18,7 @@ exports.create = (req, res) => {
     description: req.body.description,
     published: req.body.published ? req.body.published : false
   };
-
+console.log(req.body.description);
   // Save Tutorial in the database
   Tutorial.create(tutorial)
     .then(data => {
